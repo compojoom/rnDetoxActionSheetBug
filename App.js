@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,7 +14,8 @@ import {
   View,
   Text,
   StatusBar,
-    TouchableOpacity
+    TouchableOpacity,
+    Switch
 } from 'react-native';
 
 import {
@@ -24,37 +25,35 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { useActionSheet } from '@expo/react-native-action-sheet'
 
-const App: () => React$Node = () => {
-  const { showActionSheetWithOptions } = useActionSheet();
+const MySwitch = ({testID}) => {
+  const [touched, setTouched] = useState(false)
+
+  const handleSwitch = useCallback(() => {
+    setTouched(!touched)
+  }, [touched])
+
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-
-          <TouchableOpacity testID="openActionSheet" style={{marginTop: 100}} onPress={() => {
-            const options = [
-              {label: 'button 1'},
-              {
-                label: "Cancel",
-              },
-            ]
-            showActionSheetWithOptions({
-              options: options.map(button => button.label),
-              cancelButtonIndex: options.length - 1,
-            })
-          }}>
-            <Text>Open action sheet</Text>
-          </TouchableOpacity>
-
-        </ScrollView>
-      </SafeAreaView>
-    </>
+        <Switch
+            value={touched}
+            disabled={false}
+            onValueChange={handleSwitch}
+            testID={testID + "NetworkSwitch"}
+        />
   );
+}
+const App: () => React$Node = () => {
+
+  return (
+      <View style={{marginTop: 150}}>
+        <MySwitch testID={"A"} />
+        <MySwitch testID={"B"} />
+        <MySwitch testID={"C"} />
+        <MySwitch testID={"D"} />
+        <MySwitch testID={"E"} />
+        <MySwitch testID={"F"} />
+      </View>
+  )
 };
 
 const styles = StyleSheet.create({
